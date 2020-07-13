@@ -7,7 +7,7 @@ const Home = () => import('views/home/Home')
 const Category = () => import('views/category/Category')
 const Profile = () => import('views/profile/Profile')
 const Shopcart = () => import('views/shopcart/Shopcart')
-
+const Details = () => import('views/details/Details')
 
 
 const routes = [
@@ -17,19 +17,23 @@ const routes = [
   },
   {
     path:'/home',
-    component:Home
+    component: Home
   },
   {
     path:'/category',
-    component:Category
+    component: Category
   },
   {
     path: '/profile',
-    component:Profile
+    component: Profile
   },
   {
     path: '/shopcart',
     component:Shopcart
+  },
+  {
+    path: '/details/:iid',
+    component: Details
   }
 ]
 
