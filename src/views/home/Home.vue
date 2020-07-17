@@ -13,7 +13,7 @@
       class="content"
       ref="scroll"
       :probe-type="3"
-      @backTop="backTopShow"
+      @backTop="contentScroll"
       :pull-up-load="true"
       @pullingUp="loadMore">
       <home-swiper
@@ -45,7 +45,8 @@
   import FeatureView from "./childrencomps/FeatureView"
 
   import { getHomeMultidata, getHomeGoods } from 'network/home'
-  import { debounce } from 'common/utils'
+  import { itemListenerMixin } from  'common/mixin'
+  import { backTopListenerMixin } from  'common/mixin'
 
   export default {
         name: "Home",
@@ -59,22 +60,23 @@
           BetterScroll,
           BackTop
         },
+        mixins: [itemListenerMixin],
+        mixins: [backTopListenerMixin],
         data(){
-          return{
-            banner: [],
-            recommend: [],
-            goods: {
-              'pop': { page: 0, list: [] },
-              'new': { page: 0, list: [] },
-              'sell': { page: 0, list: [] }
-            },
-            currentType: 'pop',
-            isBackTopShow: false,
-            isTabControlShow: false,
-            tabControlOffsetTop: 0,
-            saveY: 0
-          }
-        },
+              return{
+                banner: [],
+                recommend: [],
+                goods: {
+                  'pop': { page: 0, list: [] },
+                  'new': { page: 0, list: [] },
+                  'sell': { page: 0, list: [] }
+                },
+                currentType: 'pop',
+                isTabControlShow: false,
+                tabControlOffsetTop: 0,
+                saveY: 0
+           }
+         },
         computed: {
           showGoods(){
             return this.goods[this.currentType].list
@@ -92,19 +94,16 @@
           // 3.监听goods item中的图片加载完成
         },
         activated() {
-          console.log(this.saveY);
+          // console.log(this.saveY);
           this.$refs.scroll.refresh()
           this.$refs.scroll.scrollTo(0, this.saveY, 0)
         },
         deactivated() {
           this.saveY = this.$refs.scroll.getScrollY()
-          console.log(this.saveY);
+          this.$bus.$off('itemImageLoad', this.itemImgListener)
         },
-        mounted(){
-          const refresh = debounce(this.$refs.scroll.refresh, 50)
-          this.$bus.$on('itemImageLoad',() => {
-            refresh()
-          })
+        mounted() {
+          console.log('我是mounted');
         },
         methods: {
           /*
@@ -150,15 +149,9 @@
           swpierImageLoad(){
             this.tabControlOffsetTop = this.$refs.tabControl2.$el.offsetTop
           },
-          backTopScroll(){
-            // console.log('返回顶部');
-            this.$refs.scroll.scrollTo(0, 0)
-          },
-          backTopShow(position){
-            // console.log(position);
+          contentScroll(position){
             // 返回顶部
-            this.isBackTopShow = (-position.y) > 1000
-
+            this.listenShowBackTop(position)
             // tab-control吸顶
             this.isTabControlShow = (-position.y) > this.tabControlOffsetTop
           },

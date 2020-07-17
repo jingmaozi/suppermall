@@ -11,12 +11,12 @@
         components: {
           GoodsItem
         },
-      props: {
-          goods: Array,
-          default(){
-            return []
-          }
-      }
+        props: {
+            goods: Array,
+            default(){
+              return []
+            }
+        }
     }
 </script>
 
