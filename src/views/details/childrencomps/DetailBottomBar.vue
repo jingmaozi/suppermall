@@ -7,7 +7,7 @@
         </div>
       </div>
       <div class="right dis flx">
-        <span class="cart flx">加入购物车</span>
+        <span class="cart flx" @click="addToCart">加入购物车</span>
         <span class="buy flx">购买</span>
       </div>
     </div>
@@ -22,9 +22,14 @@
                 {position: '50% -58px', title: '客服'},
                 {position: '50% -107px', title: '店铺'},
                 {position: '50%  1px', title: '收藏'}
-                ]
+                ],
             }
+        },
+      methods: {
+        addToCart(){
+          this.$emit('addToCart')
         }
+      }
     }
 </script>
 

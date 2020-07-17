@@ -1,27 +1,29 @@
 <template>
     <div class="rate">
-      <div class="title">
+<!--      <div>{{ typeof buyrate.avatar }}</div>-->
+      <div class="title" >
         <span>用户评价</span>
         <span>更多</span>
       </div>
-      <div>
+      <div v-if="buyrate.avatar">
         <div class="user">
           <div class="userName">
             <span class="avatar">
-              <img :src=" buyRate.avatar " alt="">
+              <img :src=" buyrate.avatar " alt="">
             </span>
-            <span class="uname">{{ buyRate.uname }}</span>
+            <span class="uname">{{ buyrate.uname }}</span>
           </div>
           <p>{{ content }}</p>
           <div class="info">
-            <span>{{ buyRate.list.created | showDate }}</span>
-            <span class="style">{{ buyRate.list.style }}</span>
+            <span>{{ buyrate.list.created | showDate }}</span>
+            <span class="style">{{ buyrate.list.style }}</span>
           </div>
-          <div class="imgs" v-if="buyRate.list.images">
-            <span  v-for="item in buyRate.list.images" ><img  class="cover" :src="item" alt=""></span>
+          <div class="imgs" v-if="buyrate.list.images">
+            <span  v-for="item in buyrate.list.images" ><img  class="cover" :src="item" alt=""></span>
           </div>
         </div>
       </div>
+      <div v-else class="noRate"><i>暂时没有评价</i></div>
     </div>
 </template>
 
@@ -31,7 +33,7 @@
   export default {
         name: "Rate",
         props: {
-            buyRate: {
+            buyrate: {
               type: Object,
               default(){
                 return {}
@@ -44,9 +46,9 @@
           }
         },
         computed:{
-              content(){
-                return this.buyRate? this.buyRate.list.content : ''
-              }
+            content(){
+              return this.buyrate? this.buyrate.list.content : ''
+            }
         },
         filters: {
           //过滤时间
@@ -113,5 +115,10 @@
     object-fit: cover;
     margin-right: 4px;
     object-position: 50% 50%;
+  }
+  .noRate{
+    font-size: 14px;
+    text-align: center;
+    padding-top: 10px;
   }
 </style>

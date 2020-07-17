@@ -18,12 +18,14 @@ export function getDetailRecommend() {
 export class DetailsGoodsInfo {
   constructor(columns, itemInfo, shopInfo) {
     this.title = itemInfo.title;
+    this.highNowPrice = itemInfo.highNowPrice;
+    this.lowNowPrice = itemInfo.lowNowPrice;
     this.price = itemInfo.price;
     this.oldPrice = itemInfo.oldPrice;
     this.discountDesc = itemInfo.discountDesc;
     this.discountBgColor = itemInfo.discountBgColor;
     this.columns = columns;
-    this.services = shopInfo.services
+    this.services = shopInfo.services;
   }
 }
 

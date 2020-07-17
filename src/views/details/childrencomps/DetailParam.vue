@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="params">
       <ul>
         <li>1参数</li>
         <li>2参数</li>
@@ -22,5 +22,8 @@
 </script>
 
 <style scoped>
-
+  .params{
+    padding: 16px;
+    border-bottom: var(--border-belt);
+  }
 </style>

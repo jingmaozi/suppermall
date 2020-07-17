@@ -7,10 +7,10 @@
         <shop-info :shopInfo="shopInfo"></shop-info>
         <detail-images :detailImage="detailImgs" @imageLoad="imageLoad" ></detail-images>
         <detail-param ref="param"></detail-param>
-        <rate :buy-rate="buyerRate" ref="detailRate"></rate>
+        <rate :buyrate="buyerRate" ref="detailRate"></rate>
         <goods :goods="recommend" ref="detailRecom"></goods>
       </better-scroll>
-      <detail-bottom-bar></detail-bottom-bar>
+      <detail-bottom-bar @addToCart="addToCart"></detail-bottom-bar>
       <back-top @click.native="backTopScroll" v-show="isBackTopShow"></back-top>
     </div>
 </template>
@@ -49,6 +49,7 @@
             themeTops: [0, 0, 0, 0, 0],
             currentIndex: 0,
             getNavDebounce: null,
+            desc: ''
           }
         },
         mixins: [backTopListenerMixin],
@@ -68,7 +69,7 @@
         created() {
           this.iid =  this.$route.params.iid;
           getDetailsData(this.iid).then((res) => {
-            // console.log(res);
+            console.log(res);
             this.topImages.push(...res.result.itemInfo.topImages)
             // console.log(this.topImages)
             const goodsInfo = new DetailsGoodsInfo(res.result.columns, res.result.itemInfo, res.result.shopInfo)
@@ -78,6 +79,7 @@
             this.shopInfo = shopInfo
 
             this.detailImgs = res.result.detailInfo.detailImage
+            this.desc =  res.result.detailInfo.desc
 
             const rate = new DetailsRate(res.result.rate.list[0])
             this.buyerRate = rate
@@ -95,7 +97,7 @@
             this.themeTops.push(this.$refs.detailRate.$el.offsetTop)
             this.themeTops.push(this.$refs.detailRecom.$el.offsetTop)
             this.themeTops.push(Number.MAX_VALUE)
-            console.log( this.themeTops);
+            // console.log( this.themeTops);
           }, 200)
         },
         methods: {
@@ -122,6 +124,16 @@
             }
             // 返回顶部
             this.listenShowBackTop(position)
+          },
+          addToCart(){
+            const product = {}
+            product.image = this.topImages[0]
+            product.title = this.goods.title
+            product.iid = this.iid
+            product.desc = this.desc
+            product.price = this.goods.highNowPrice
+            product.count = 0
+            this.$store.dispatch('addCart', product)
           }
         },
         destroyed() {
