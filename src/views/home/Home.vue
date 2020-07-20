@@ -103,7 +103,7 @@
           this.$bus.$off('itemImageLoad', this.itemImgListener)
         },
         mounted() {
-          console.log('我是mounted');
+          // console.log('我是mounted');
         },
         methods: {
           /*

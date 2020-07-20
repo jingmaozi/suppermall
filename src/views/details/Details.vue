@@ -6,7 +6,7 @@
         <goods-info :goodsIn="goods"></goods-info>
         <shop-info :shopInfo="shopInfo"></shop-info>
         <detail-images :detailImage="detailImgs" @imageLoad="imageLoad" ></detail-images>
-        <detail-param ref="param"></detail-param>
+        <detail-param ref="parm"></detail-param>
         <rate :buyrate="buyerRate" ref="detailRate"></rate>
         <goods :goods="recommend" ref="detailRecom"></goods>
       </better-scroll>
@@ -81,9 +81,11 @@
             this.detailImgs = res.result.detailInfo.detailImage
             this.desc =  res.result.detailInfo.desc
 
-            const rate = new DetailsRate(res.result.rate.list[0])
-            this.buyerRate = rate
-            // console.log(this.buyerRate)
+            if(res.result.rate.list){
+              const rate = new DetailsRate(res.result.rate.list[0])
+              this.buyerRate = rate
+            }
+
           })
           getDetailRecommend().then((res) => {
             this.recommend.push(...res.data.list)
@@ -93,7 +95,8 @@
           this.getNavDebounce = debounce(() => {
             this.themeTops = []
             this.themeTops.push(0)
-            this.themeTops.push(this.$refs.param.$el.offsetTop)
+            // console.log(this.$refs.parm);
+            this.themeTops.push(this.$refs.parm.$el.offsetTop)
             this.themeTops.push(this.$refs.detailRate.$el.offsetTop)
             this.themeTops.push(this.$refs.detailRecom.$el.offsetTop)
             this.themeTops.push(Number.MAX_VALUE)

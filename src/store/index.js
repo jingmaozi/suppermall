@@ -9,6 +9,7 @@ const store = new Vuex.Store({
   },
   mutations: {
     addToCart(state, payload){
+      payload.checked = false
       state.cartList.push(payload)
     },
     addCounter(state, payload){

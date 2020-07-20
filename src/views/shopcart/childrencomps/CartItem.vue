@@ -1,7 +1,7 @@
 <template>
   <div >
-    <div v-for="item in cartlist" class="cart-list">
-      <check-botton></check-botton>
+    <div v-for="(item, index) in cartlist" class="cart-list" :key="index">
+      <check-botton :ischecked="item.checked" @click.native="checkedClick(index)"></check-botton>
       <div class="cart-item">
         <span class="left">
         <img :src="item.image" alt="">
@@ -31,10 +31,56 @@
               }
             }
         },
+        data(){
+          return{
+            priceSum: 0,
+            goCount: 0
+          }
+        },
         components: {
           CheckBotton
-        }
+        },
+        mounted() {
+          let cartList = this.cartlist
+          if(this.priceSum == 0) {
+            for(let i=0;i<cartList.length;i++){
+              if(cartList[i].checked) {
+                this.priceSum += cartList[i].price* cartList[i].count
+                this.goCount += cartList[i].count* 1
+              }
+            }
+          }
+        },
+        methods: {
+          checkedClick(index){
+            let selectCount = 0
+            let cartList = this.cartlist
+            let cartItem = this.cartlist[index]
+            cartItem.checked = !cartItem.checked
 
+            if(cartItem.checked) {
+              this.priceSum += cartItem.price* cartItem.count
+              this.goCount += cartItem.count* 1
+              this.$emit('selectChecked', this.priceSum.toFixed(2), this.goCount)
+            }else{
+              this.priceSum -= cartItem.price* cartItem.count
+              this.goCount -= cartItem.count* 1
+              this.$emit('selectChecked', this.priceSum.toFixed(2), this.goCount)
+            }
+
+            for( let i=0;i<cartList.length;i++ ) {
+              if(!cartList[i].checked) {
+                selectCount += 1
+              }
+            }
+            if(selectCount == 0) {
+              this.$emit('changeSelectAll', true, this.priceSum.toFixed(2), this.goCount)
+            }
+            if(selectCount == 1) {
+              this.$emit('changeSelectAll', false, this.priceSum.toFixed(2), this.goCount)
+            }
+          }
+        }
     }
 </script>
 

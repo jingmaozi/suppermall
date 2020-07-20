@@ -3,8 +3,8 @@
       <p> {{ goodsIn.title }}</p>
       <div class="goodsIn-price">
         <span class="price">{{ goodsIn.price }}</span>
-        <span class="oldPrice">{{ goodsIn.oldPrice }}</span>
-        <span class="discount" :style="{backgroundColor: goodsIn.discountBgColor}">{{ goodsIn.discountDesc }}</span>
+        <span v-if="goodsIn.oldPrice" class="oldPrice">{{ goodsIn.oldPrice }}</span>
+        <span v-if="goodsIn.discountDesc" class="discount" :style="{backgroundColor: goodsIn.discountBgColor}">{{ goodsIn.discountDesc }}</span>
       </div>
       <div class="goodsIn-columns">
         <span v-for="item in goodsIn.columns">{{ item }}</span>
