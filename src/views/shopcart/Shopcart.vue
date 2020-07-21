@@ -5,7 +5,6 @@
     </nav-bar>
     <cart-item :cartlist="cartlist"></cart-item>
     <cart-bottom-bar></cart-bottom-bar>
-
   </div>
 </template>
 
@@ -26,13 +25,6 @@
             return this.$store.state.cartList
           }
         },
-        created() {
-          console.log(this.$store.state.cartList);
-          console.log('------created-----------------');
-        },
-        mounted() {
-          console.log('------mounted-----------------');
-        }
     }
 </script>
 

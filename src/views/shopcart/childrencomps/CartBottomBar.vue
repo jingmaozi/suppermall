@@ -5,7 +5,7 @@
       <span class="selectAll">全选</span>
       <span>合计：{{ totalPrice }}</span>
     </div>
-    <div class="count">去计算({{ checkedLength }})</div>
+    <div class="count" @click="goToCount">去计算({{ checkedLength }})</div>
   </div>
 </template>
 
@@ -49,6 +49,11 @@
               this.$store.state.cartList.filter(item => {
                 return item.checked = true
               })
+            }
+          },
+          goToCount(){
+            if(!this.isSelectAll){
+              this.$toast.show('请选择商品')
             }
           }
         }

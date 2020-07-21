@@ -20,20 +20,22 @@
   import DetailSwiper from './childrencomps/DetailSwiper'
   import GoodsInfo from './childrencomps/GoodsInfo'
   import ShopInfo from './childrencomps/ShopInfo'
-  import BetterScroll from "components/common/betterscroll/BetterScroll"
   import DetailParam from './childrencomps/DetailParam'
   import DetailImages from './childrencomps/DetailImages'
   import Rate from './childrencomps/Rate'
-  import Goods from 'components/content/goods/Goods'
   import DetailBottomBar from './childrencomps/DetailBottomBar'
-  import BackTop from "components/content/backtop/BackTop"
 
+  import BetterScroll from "components/common/betterscroll/BetterScroll"
+  import Goods from 'components/content/goods/Goods'
+  import BackTop from "components/content/backtop/BackTop"
 
   import { getDetailsData, getDetailRecommend, DetailsRate} from 'network/details'
   import { DetailsGoodsInfo } from 'network/details'
   import { DetailsShopInfo } from 'network/details'
   import { debounce } from 'common/utils'
   import { backTopListenerMixin } from  'common/mixin'
+
+  import {mapActions} from 'vuex'
 
   export default {
         name: "Details",
@@ -49,7 +51,9 @@
             themeTops: [0, 0, 0, 0, 0],
             currentIndex: 0,
             getNavDebounce: null,
-            desc: ''
+            desc: '',
+            message: '',
+            isMsgShow: false
           }
         },
         mixins: [backTopListenerMixin],
@@ -64,7 +68,7 @@
               Rate,
               Goods,
               DetailBottomBar,
-              BackTop
+              BackTop,
         },
         created() {
           this.iid =  this.$route.params.iid;
@@ -104,6 +108,8 @@
           }, 200)
         },
         methods: {
+          //将vuex中的actiion的方法映射到methods中
+          ...mapActions(['addCart']),
           imageLoad(){
             this.$refs.scroll.refresh()
             //根据图片下载完成获取组件高度防抖
@@ -136,12 +142,30 @@
             product.desc = this.desc
             product.price = this.goods.highNowPrice
             product.count = 0
-            this.$store.dispatch('addCart', product)
+
+            this.addCart(product).then(res => {
+              // this.message = res
+              // this.isMsgShow = true
+              //
+              // setTimeout(() => {
+              //   this.isMsgShow = false
+              //   this.message = ''
+              // }, 2000)
+                this.$toast.show(res)
+            })
+
+            // this.$store.dispatch('addCart', product).then(res => {
+            //   this.message = res
+            //   setTimeout(() => {
+            //     this.isMsgShow = true
+            //   }, 2000)
+            //   this.isMsgShow = false
+            // })
           }
         },
-        destroyed() {
-          this.$bus.$off('itemImageLoad', this.itemImgListener)
-        }
+          destroyed() {
+            this.$bus.$off('itemImageLoad', this.itemImgListener)
+          }
   }
 </script>
 

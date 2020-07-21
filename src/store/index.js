@@ -18,20 +18,24 @@ const store = new Vuex.Store({
   },
   actions: {
     addCart(context, payload){
-      let oldProduct = null
-      for(let value of context.state.cartList){
-        if(value.iid === payload.iid){
-          oldProduct = value
+      return new Promise((resolve, reject) => {
+        let oldProduct = null
+        for(let value of context.state.cartList){
+          if(value.iid === payload.iid){
+            oldProduct = value
+          }
         }
-      }
-      if(oldProduct){
-        // oldProduct.count += 1
-        context.commit('addCounter', oldProduct)
-      }else {
-        payload.count = 1
-        context.commit('addToCart', payload)
-        // context.state.cartList.push(payLoad)
-      }
+        if(oldProduct){
+          // oldProduct.count += 1
+          context.commit('addCounter', oldProduct)
+          resolve('当前商品加1')
+        }else {
+          payload.count = 1
+          context.commit('addToCart', payload)
+          // context.state.cartList.push(payLoad)
+          resolve('添加新的商品')
+        }
+      })
     }
   }
 })
